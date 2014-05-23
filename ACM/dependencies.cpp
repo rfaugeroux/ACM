@@ -61,11 +61,12 @@ int main() {
             //    continue;
             //}
             //left_dep[to_add] = -1;
-            printf("%d ", to_add+1);
+            printf("%d", to_add+1);
             vector<int> deps = dependent[to_add];
             for (unsigned int d = 0; d < deps.size(); ++d) {
                 if(!--left_dep[deps[d]]) available_tasks.push(deps[d]);
             }
+            if(!available_tasks.empty()) printf(" ");
         }
         printf("\n");
     }

@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <string>
 
 using namespace std;
 
@@ -108,11 +109,18 @@ int main() {
     scanf("%d", &n_tc);
     for (int tc = 0; tc < n_tc; ++tc) {
 
+        if(tc) printf("\n");
+
+        string part1, part2;
+        cin >> part1 >> part2;
+        int f1 = part1.find(".");
+        int f2 = part2.find(".");
+
         int date[4];
-        date[0]=2;
-        date[1]=7;
-        date[2]=5;
-        date[3]=15;
+        date[0]=atoi(part1.substr(0, f1).c_str())-1;
+        date[1]=trad[part1.substr(f1+1, part1.length())];
+        date[2]=atoi(part2.substr(0, f2).c_str())-1;
+        date[3]=trad[part2.substr(f2+1, part2.length())];
 
         int diff = -1;
 
@@ -127,7 +135,7 @@ int main() {
         }
 
         if(diff==-1) {
-            printf("NO SOLUTION");
+            printf("NO SOLUTION\n");
             continue;
         }
 
