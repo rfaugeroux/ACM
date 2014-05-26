@@ -12,6 +12,8 @@ int main() {
     scanf("%d", &n_tc);
 
     for (int tc = 0; tc < n_tc; ++tc) {
+
+        if(tc) printf("\n");
         int n_cist;
         scanf("%d", &n_cist);
         map<float, float> surface;
@@ -23,11 +25,8 @@ int main() {
             scanf("%f", &width);
             scanf("%f", &depth);
             float mult = width*depth;
-            surface[level] = mult;
-            surface[level+height] = -mult;
-            cout << level << endl;
-            cout << level+height << endl;
-
+            surface[level] += mult;
+            surface[level+height] += -mult;
         }
 
         float volume;
@@ -42,13 +41,12 @@ int main() {
             --i;
             map<float, float>::iterator next = ++i;
             --i;
-            cout << "I: " << i->first<< " and next: " << next->first << endl;
             m += i->second;
             float curr_h = next->first - i->first;
             float next_v = curr_h*m + curr_v;
             if(volume >= curr_v && volume < next_v) {
                 float k = (volume - curr_v)/m;
-                printf("%f\n", curr_h+k);
+                printf("%.2f\n", curr_l+k);
                 found = true;
                 break;
             }
