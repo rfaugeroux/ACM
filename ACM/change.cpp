@@ -13,7 +13,8 @@ int main() {
 
     for (int test_case = 0; test_case < N; ++test_case) {
         int amount, n_val;
-        scanf("%d%d", &amount, &n_val);
+        scanf("%d", &amount);
+        scanf("%d", &n_val);
 
         vector<int> values;
         int val;
@@ -31,16 +32,21 @@ int main() {
         }
 
         for (int val_i = 0; val_i < n_val; ++val_i) {
-            int value = values.at(val_i);
+            int value = values[val_i];
             for (int am = value; am < amount+1; ++am) {
                 can[am] = can[am] || can[am-value];
             }
         }
+
+        if(test_case != 0) {
+            printf("\n");
+        }
+
         if (can[amount]) {
-            printf("YES\n\n");
+            printf("YES\n");
         }
         else {
-            printf("NO\n\n");
+            printf("NO\n");
         }
     }
     return 0;
