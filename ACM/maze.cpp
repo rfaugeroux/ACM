@@ -17,29 +17,9 @@ public:
         dist = _dist;
     }
 
-    //    bool operator== (const Node& n2){
-    //        return dist==n2.dist;
-    //    }
-
-    //    bool operator!= (const Node& n2){
-    //        return dis!=n2.dist;
-    //    }
-
     bool operator< (const Node& n2) const{
         return dist>n2.dist;
     }
-
-    //    bool operator<= (const Node& n2){
-    //        return dis<=n2.dist;
-    //    }
-
-    //    bool operator> (const Node& n2){
-    //        return dis>n2.dist;
-    //    }
-
-    //    bool operator>= (const Node& n2){
-    //        return dis>=n2.dist;
-    //    }
 };
 
 
