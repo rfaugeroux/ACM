@@ -3,6 +3,8 @@
 #include <set>
 #include <vector>
 
+#define MAX_COL 450
+
 using namespace std;
 
 int main() {
@@ -20,15 +22,21 @@ int main() {
         set<int> belong[n_c];
         set<int> group[n_l];
 
-
         for (int i = 0; i < n_l; ++i) {
+            char next[MAX_COL];
+            scanf("%s", next);
             for (int j = 0; j < n_c; ++j) {
-                char next;
-                scanf("%c", &next);
-                if(next=='1'){
+                if(next[j]=='1'){
                     belong[j].insert(i);
                     group[i].insert(j);
                 }
+            }
+        }
+
+        for (int i = 0; i < n_l; ++i) {
+            if(group[i].size()==1){
+                set<int>::iterator it = group[i].begin();
+                belong[*it].erase(i);
             }
         }
 
@@ -43,6 +51,7 @@ int main() {
                 if(group[*gr].size()<min_size){
                     min_size = group[*gr].size();
                     gr_i = *gr;
+                    if(min_size==2) break;
                 }
             }
             if(min_size==2){
@@ -55,8 +64,13 @@ int main() {
             }
             else {
                 int min_d = n_c;
-                int candidate; = -1;
-                for (set<int>::iterator  = group[gr_i].begin(); gr!=group[gr_i].end(); ++gr){
+                for (set<int>::iterator cand = group[gr_i].begin(); cand!=group[gr_i].end(); ++cand){
+                    if(*cand==val) continue;
+                    if(belong[*cand].size()<min_d){
+                        min_d = belong[*cand].size();
+                        next = *cand;
+                    }
+                }
             }
             perm.push_back(next);
             for (set<int>::iterator gr = belong[val].begin(); gr!=belong[val].end(); ++gr){
@@ -68,9 +82,11 @@ int main() {
             val = next;
 
         }
+
         for (unsigned int i = 0; i < perm.size(); ++i) {
             printf("%d\n", perm[i]);
         }
+
     }
 
     return 0;
