@@ -40,12 +40,20 @@ int main() {
             }
         }
 
+
+        int last = -1;
+        for (int i = 0; i < n_c; ++i) {
+            if(belong[i].size()==0) last = i;
+        }
+
         int val = 0;
-        vector<int> perm;
-        perm.push_back(val);
-        while(perm.size()<n_c){
+        int n_perm = 1;
+        printf("%d\n", 0);
+
+        while(n_perm<n_c){
+
             int next=-1;
-            int min_size = n_c;
+            int min_size = n_c+2;
             int gr_i=-1;
             for (set<int>::iterator gr = belong[val].begin(); gr!=belong[val].end(); ++gr){
                 if(group[*gr].size()<min_size){
@@ -54,6 +62,11 @@ int main() {
                     if(min_size==2) break;
                 }
             }
+            if(gr_i==-1) {
+                printf("%d\n", last);
+                break;
+            }
+
             if(min_size==2){
                 int first, sec;
                 set<int>::iterator it = group[gr_i].begin();
@@ -72,22 +85,17 @@ int main() {
                     }
                 }
             }
-            perm.push_back(next);
             for (set<int>::iterator gr = belong[val].begin(); gr!=belong[val].end(); ++gr){
                 group[*gr].erase(val);
                 if(group[*gr].size()==1){
                     belong[*group[*gr].begin()].erase(*gr);
                 }
             }
+            printf("%d\n", next);
             val = next;
-
-        }
-
-        for (unsigned int i = 0; i < perm.size(); ++i) {
-            printf("%d\n", perm[i]);
+            n_perm++;
         }
 
     }
-
     return 0;
 }
