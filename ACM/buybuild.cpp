@@ -35,7 +35,7 @@ int main() {
             scanf("%d", &x);
             scanf("%d", &y);
             coord[i][0] = x;
-            coord[j][1] = y;
+            coord[i][1] = y;
         }
 
         int d[n_city][n_city];
@@ -49,7 +49,14 @@ int main() {
             }
         }
 
-
+        for (int sub_sel = 0; sub_sel < (1<<n_subn); ++sub_sel) {
+            vector<int> selected_subn;
+            int bits = sub_sel;
+            for (int i = 0; i < n_subn; ++i) {
+                if(bits&1) selected_subn.push_back(i);
+                bits >>=1;
+            }
+        }
     }
     return 0;
 }
