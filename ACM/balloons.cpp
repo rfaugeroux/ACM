@@ -20,7 +20,8 @@ int main() {
         scanf("%d", &nb);
         if(!nb) break;
 
-        printf("Box %d: \n", tc);
+        printf("Box %d: ", tc);
+        tc++;
 
         int c1[3];
         int c2[3];
@@ -48,16 +49,17 @@ int main() {
             perm[i] = i;
         }
 
-        int volume = -1;
+        float vbox = (c2[2]-c1[2])*(c2[1]-c1[1])*(c2[0]-c1[0]);
+        float volume = vbox;
         sort(perm, perm+nb);
         do {
-            int radius[nb];
-            int curr_V = (c1[2]-c2[2])*(c1[1]-c2[1])*(c1[0]-c2[0]);
+            float radius[nb];
+            float curr_V = vbox;
             for (int i = 0; i < nb; ++i) {
-                radius[i]=0;
+                radius[i] = 0;
             }
             for (int pi = 0; pi < nb; ++pi) {
-                int min_r = c1[2]-c1[1];
+                int min_r = c2[2]-c1[2];
                 int * pa = p[perm[pi]];
                 min_r = min(min_r, pa[0]-c1[0]);
                 min_r = min(min_r, pa[1]-c1[1]);
@@ -69,21 +71,23 @@ int main() {
                     int * pb = p[perm[i]];
                     int rb = radius[i];
                     if(rb==0) continue;
-                    for (int d = 0; d < 3; ++d) {
-                        min_r = min(min_r, abs(pa[d]-pb[d])-rb);
-                    }
+                    int dx = pa[0]-pb[0];
+                    int dy = pa[1]-pb[1];
+                    int dz = pa[2]-pb[2];
+                    float d = dx*dx + dy*dy + dz*dz;
+                    d = sqrt(d);
+                    min_r = min(min_r, d-rb);
                 }
-                cout << min_r << endl;
                 if(min_r <= 0) continue;
                 radius[pi] = min_r;
                 curr_V -= 4*min_r*min_r*min_r*PI/3.f;
-             }
+            }
             if(curr_V < volume || volume==-1){
                 volume = curr_V;
             }
         } while(next_permutation(perm, perm+nb));
 
-        printf("%d\n\n", volume);
+        printf("%d\n\n", int(round(volume)));
 
     }
     return 0;
