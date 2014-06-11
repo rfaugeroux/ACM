@@ -13,32 +13,29 @@ int main() {
 
     float PI = 4*atan(1);
 
-    int tc = 1;
+    int tc = 0;
     while(1){
 
         int nb;
         scanf("%d", &nb);
         if(!nb) break;
 
-        printf("Box %d: ", tc);
-        tc++;
+        printf("Box %d: ", ++tc);
 
-        int c1[3];
-        int c2[3];
-        int x1, y1, z1, x2, y2, z2;
-        scanf("%d", &x1);
-        scanf("%d", &y1);
-        scanf("%d", &z1);
-        scanf("%d", &x2);
-        scanf("%d", &y2);
-        scanf("%d", &z2);
+        int c[2][3];
+        int ctmp[2][3];
 
-        c1[0] = min(x1, x2);
-        c2[0] = max(x1, x2);
-        c1[1] = min(y1, y2);
-        c2[1] = max(y1, y2);
-        c1[2] = min(z1, z2);
-        c2[2] = max(z1, z2);
+        for (int j = 0; j < 2; ++j) {
+            for (int i = 0; i < 3; ++i) {
+                int a0;
+                scanf("%d", &a0);
+                ctmp[j][i] = a0;
+            }
+        }
+        for (int i = 0; i < 3; ++i) {
+            c[0][i] = min(ctmp[0][i], ctmp[1][i]);
+            c[1][i] = max(ctmp[0][i], ctmp[1][i]);
+        }
 
         int p[nb][3];
         int perm[nb];
@@ -49,7 +46,7 @@ int main() {
             perm[i] = i;
         }
 
-        float vbox = (c2[2]-c1[2])*(c2[1]-c1[1])*(c2[0]-c1[0]);
+        float vbox = (c[1][2]-c[0][2])*(c[1][1]-c[0][1])*(c[1][0]-c[0][0]);
         float volume = vbox;
         sort(perm, perm+nb);
         do {
@@ -59,14 +56,14 @@ int main() {
                 radius[i] = 0;
             }
             for (int pi = 0; pi < nb; ++pi) {
-                int min_r = c2[2]-c1[2];
+                int min_r = c[1][2]-c[0][2];
                 int * pa = p[perm[pi]];
-                min_r = min(min_r, pa[0]-c1[0]);
-                min_r = min(min_r, pa[1]-c1[1]);
-                min_r = min(min_r, pa[2]-c1[2]);
-                min_r = min(min_r, c2[0] - pa[0]);
-                min_r = min(min_r, c2[1] - pa[1]);
-                min_r = min(min_r, c2[2] - pa[2]);
+
+                for (int d = 0; d < 3; ++d) {
+                    min_r = min(min_r, pa[d]-c[0][d]);
+                    min_r = min(min_r, c[1][d] - pa[d]);
+                }
+
                 for (int i = 0; i < pi-1; ++i) {
                     int * pb = p[perm[i]];
                     int rb = radius[i];
