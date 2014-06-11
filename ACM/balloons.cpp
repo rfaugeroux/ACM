@@ -85,7 +85,6 @@ int main() {
         } while(next_permutation(perm, perm+nb));
 
         printf("%d\n\n", int(round(volume)));
-
     }
     return 0;
 }
