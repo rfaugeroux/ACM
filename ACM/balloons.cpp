@@ -64,7 +64,7 @@ int main() {
                     min_r = min(min_r, c[1][d] - pa[d]);
                 }
 
-                for (int i = 0; i < pi-1; ++i) {
+                for (int i = 0; i < pi; ++i) {
                     int * pb = p[perm[i]];
                     int rb = radius[i];
                     if(rb==0) continue;
