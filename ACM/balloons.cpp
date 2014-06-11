@@ -79,7 +79,7 @@ int main() {
                 radius[pi] = min_r;
                 curr_V -= 4*min_r*min_r*min_r*PI/3.f;
             }
-            if(curr_V < volume || volume==-1){
+            if(curr_V < volume){
                 volume = curr_V;
             }
         } while(next_permutation(perm, perm+nb));
