@@ -11,8 +11,6 @@ using namespace std;
 
 int main() {
 
-    float PI = 4*atan(1);
-
     int tc = 0;
     while(1){
 
@@ -56,35 +54,40 @@ int main() {
                 radius[i] = 0;
             }
             for (int pi = 0; pi < nb; ++pi) {
-                int min_r = c[1][2]-c[0][2];
+                float min_r = c[1][2]-c[0][2];
                 int * pa = p[perm[pi]];
 
                 for (int d = 0; d < 3; ++d) {
                     min_r = min(min_r, pa[d]-c[0][d]);
                     min_r = min(min_r, c[1][d] - pa[d]);
                 }
+                if(min_r <= 0) continue;
 
                 for (int i = 0; i < pi; ++i) {
                     int * pb = p[perm[i]];
-                    int rb = radius[i];
+                    float rb = radius[i];
                     if(rb==0) continue;
                     int dx = pa[0]-pb[0];
                     int dy = pa[1]-pb[1];
                     int dz = pa[2]-pb[2];
                     float d = dx*dx + dy*dy + dz*dz;
+                    if(d<=rb*rb){
+                        min_r = 0;
+                        break;
+                    }
                     d = sqrt(d);
                     min_r = min(min_r, d-rb);
                 }
                 if(min_r <= 0) continue;
                 radius[pi] = min_r;
-                curr_V -= 4*min_r*min_r*min_r*PI/3.f;
+                curr_V -= 4*min_r*min_r*min_r*M_PI/3.f;
             }
             if(curr_V < volume){
                 volume = curr_V;
             }
         } while(next_permutation(perm, perm+nb));
 
-        printf("%d\n\n", int(round(volume)));
+        printf("%d\n\n", (int) round(volume));
     }
     return 0;
 }

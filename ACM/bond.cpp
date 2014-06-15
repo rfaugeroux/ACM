@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <queue>
+#include <map>
 
 #define max(a, b) ((a)>(b)?(a):(b))
 #define min(a, b) ((a)<(b)?(a):(b))
@@ -53,12 +54,7 @@ int main() {
         int np;
         scanf("%d", &np);
 
-        int dist[nc][nc];
-        for (int i = 0; i < nc; ++i) {
-            for (int j = 0; j < nc; ++j) {
-                dist[i][j] = -1;
-            }
-        }
+        map<int, map<int, int> > dist;
 
         int start[np];
         int end[np];
@@ -92,7 +88,7 @@ int main() {
                 if(node.idx==ei) {
                     break;
                 }
-                if(dist[node.idx][ei]!=-1){
+                if(dist.count(node.idx) && dist[node.idx].count(ei)){
                     dist[si][ei] = max(dist[node.idx][ei], dist[si][node.idx]);
                     dist[ei][si] = dist[si][ei];
                     break;
