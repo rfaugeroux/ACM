@@ -44,17 +44,17 @@ int main() {
             perm[i] = i;
         }
 
-        float vbox = (c[1][2]-c[0][2])*(c[1][1]-c[0][1])*(c[1][0]-c[0][0]);
-        float volume = vbox;
+        double vbox = (c[1][2]-c[0][2])*(c[1][1]-c[0][1])*(c[1][0]-c[0][0]);
+        double volume = vbox;
         sort(perm, perm+nb);
         do {
-            float radius[nb];
-            float curr_V = vbox;
+            double radius[nb];
+            double curr_V = vbox;
             for (int i = 0; i < nb; ++i) {
                 radius[i] = 0;
             }
             for (int pi = 0; pi < nb; ++pi) {
-                float min_r = c[1][2]-c[0][2];
+                double min_r = c[1][2]-c[0][2];
                 int * pa = p[perm[pi]];
 
                 for (int d = 0; d < 3; ++d) {
@@ -65,12 +65,12 @@ int main() {
 
                 for (int i = 0; i < pi; ++i) {
                     int * pb = p[perm[i]];
-                    float rb = radius[i];
+                    double rb = radius[i];
                     if(rb==0) continue;
                     int dx = pa[0]-pb[0];
                     int dy = pa[1]-pb[1];
                     int dz = pa[2]-pb[2];
-                    float d = dx*dx + dy*dy + dz*dz;
+                    double d = dx*dx + dy*dy + dz*dz;
                     if(d<=rb*rb){
                         min_r = 0;
                         break;
