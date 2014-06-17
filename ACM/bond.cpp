@@ -5,6 +5,7 @@
 #include <cmath>
 #include <queue>
 #include <map>
+#include <set>
 
 #define max(a, b) ((a)>(b)?(a):(b))
 #define min(a, b) ((a)<(b)?(a):(b))
@@ -70,18 +71,15 @@ int main() {
             int si = start[pi];
             int ei = end[pi];
 
-            bool visited[nc];
-            for (int i = 0; i < nc; ++i) {
-                visited[i] = false;
-            }
+            set<int> visited;
             priority_queue<Node> toVisit;
             toVisit.push(Node(si, 0));
 
             while(!toVisit.empty()){
                 Node node = toVisit.top();
                 toVisit.pop();
-                if(visited[node.idx]) continue;
-                visited[node.idx] = true;
+                if(visited.count(node.idx)) continue;
+                visited.insert(node.idx);
 
                 dist[si][node.idx] = node.dist;
                 dist[node.idx][si] = node.dist;
@@ -95,7 +93,7 @@ int main() {
                 }
                 for (unsigned int vi = 0; vi < adj[node.idx].size(); ++vi) {
                     Node v = adj[node.idx][vi];
-                    if(visited[v.idx]) continue;
+                    if(visited.count(v.idx)) continue;
                     toVisit.push(Node(v.idx, max(node.dist,v.dist)));
                 }
             }
