@@ -68,6 +68,15 @@ int main() {
         toAdd.push(Edge(0,0,0));
         int nAdded=0;
         while(nAdded<nc){
+            if(toAdd.empty()){
+                for (int i = 0; i < nc; ++i) {
+                    if(father[i]==-1){
+                        toAdd.push(Edge(i,i,0));
+                        depth[i]=-1;
+                        break;
+                    }
+                }
+            }
             Edge n = toAdd.top();
             toAdd.pop();
             if(father[n.a]!=-1) continue;
