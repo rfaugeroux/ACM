@@ -2,54 +2,53 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 
 using namespace std;
 
-float solve(float li, float ri, int nw, int nh, int * d){
+double solve(double l, double r, int nw, int nh, int * pos){
 
-    if(nw==1) return (d[li]+d[ri])*0.5;
 
-    float middle = (d[li]+d[ri])*0.5;
+    double dist = (r+l)*0.5;
+    if(round(10*r)==round(10*l)) return r;
+    int r_need = 1;
 
-    if(li==ri) return 0;
-
-    vector<int> leftH;
-    vector<int> rightH;
-
-    for (int i = li; i <= ri; ++i) {
-        if(d[i]<middle) leftH.push_back(i);
-        else rightH.push_back(i);
+    int li = 0;
+    for (int hi = 0; hi < nh; ++hi) {
+        if(pos[hi]-pos[li]>2*dist){
+            r_need++;
+            if(r_need>nw) return solve(dist, r, nw, nh, pos);
+            li = hi;
+        }
     }
-
-
-
-
+    return solve(l, dist, nw, nh, pos);
 }
 
 int main() {
 
-    int ntc;
-    scanf("%d", &ntc);
+    int tc;
+    scanf("%d", &tc);
 
-    for (int tc = 0; tc < ntc; ++tc) {
+    while(tc--){
 
         int nh, nw;
         scanf("%d", &nw);
         scanf("%d", &nh);
 
-        int d[nh];
+        int * d  = new int[nh];
         for (int i = 0; i < nh; ++i) {
             scanf("%d", d+i);
         }
 
         sort(d, d+nh);
 
-        float result = solve(d[0], d[nh-1]);
+        double result = solve(0, d[nh-1]-d[0], nw, nh, d);
+        result = round(10*result)/10;
 
+        printf("%.1f\n", result);
     }
-
     return 0;
 }

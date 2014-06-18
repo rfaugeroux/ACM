@@ -7,11 +7,10 @@
 #include <map>
 #include <set>
 
-#define MAX(a, b) ((a)>(b)?(a):(b))
-#define MIN(a, b) ((a)<(b)?(a):(b))
+#define max(a, b) ((a)>(b)?(a):(b))
+#define min(a, b) ((a)<(b)?(a):(b))
 
 using namespace std;
-
 
 class Edge {
 public:
@@ -28,23 +27,6 @@ public:
     }
 };
 
-int parent[50000];
-int cost[50000];
-
-int find_parent(int x) {
-
-    return (parent[x]==x)?x:
-                          parent[x] = find_parent(parent[x]);
-}
-
-int find_cost(int x) {
-    return (cost[x]==x)?x:
-                          parent[x] = find_parent(parent[x]);
-}
-
-void connect(int x, int y, int cost){
-    parent[find_parent(y)]=find_parent(x);
-}
 
 int main() {
 
@@ -59,25 +41,49 @@ int main() {
 
         scanf("%d", &nr);
 
-        priority_queue<Edge> edges;
+        vector<Edge> adj[nc];
 
         for (int i = 0; i < nr; ++i) {
             int to, from, danger;
             scanf("%d", &to);
             scanf("%d", &from);
             scanf("%d", &danger);
-            edges.push(Edge(to-1, from-1, danger));
+            to--;
+            from--;
+            adj[to].push_back(Edge(from, to, danger));
+            adj[from].push_back(Edge(to, from, danger));
+        }
+
+
+        priority_queue<Edge> toAdd;
+
+        int father[nc];
+        int cost[nc];
+        int depth[nc];
+        depth[0]=-1;
+        for (int i = 0; i < nc; ++i) {
+            father[i]=-1;
+        }
+
+        toAdd.push(Edge(0,0,0));
+        int nAdded=0;
+        while(nAdded<nc){
+            Edge n = toAdd.top();
+            toAdd.pop();
+            if(father[n.a]!=-1) continue;
+            nAdded++;
+            father[n.a] = n.b;
+            cost[n.a] = n.cost;
+            depth[n.a] = depth[n.b]+1;
+            for (unsigned int vi = 0; vi < adj[n.a].size(); ++vi) {
+                Edge e = adj[n.a][vi];
+                if(father[e.a]!=-1) continue;
+                toAdd.push(e);
+            }
         }
 
         int np;
         scanf("%d", &np);
-
-        int start[nc];
-        int end[nc];
-        for (int i = 0; i < nc; ++i) {
-            start[i]=-1;
-            end[i]=-1;
-        }
 
         for (int i = 0; i < np; ++i) {
             int st, en;
@@ -85,27 +91,25 @@ int main() {
             scanf("%d", &en);
             st--;
             en--;
-            start[st] = en;
-            end[en] = st;
+
+            int d=0;
+
+            while(depth[st]>depth[en]){
+                d = max(d, cost[st]);
+                st = father[st];
+            }
+            while(depth[st]<depth[en]){
+                d = max(d, cost[en]);
+                en = father[en];
+            }
+            while(st!=en){
+                d = max(d, cost[st]);
+                st = father[st];
+                d = max(d, cost[en]);
+                en = father[en];
+            }
+            printf("%d\n", d);
         }
-
-        int result[np];
-        for (int i = 0; i < np; ++i) {
-            result[i]=-1;
-        }
-
-        for (int i = 0; i < nc; ++i) {
-            parent[i]=i;
-        }
-
-        while(edges.empty()){
-
-            Edge e = edges.top();
-            edges.pop();
-
-
-        }
-        printf("%d\n", dist[si][ei]);
     }
     return 0;
 }
