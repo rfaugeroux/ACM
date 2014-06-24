@@ -12,82 +12,93 @@
 
 using namespace std;
 
-class Edge {
+class Arete {
 public:
-    int a, b, cost;
+    int a1;
+    int a2;
+    int weight;
 
-    Edge(int i, int j, int c){
-        a = i;
-        b = j;
-        cost = c;
+
+    Arete(int _a1, int _a2, int w){
+        a1 = _a1;
+        a2 = _a2;
+        weight = w;
     }
 
-    bool operator< (const Edge& e2) const {
-        return cost > e2.cost;
+        bool operator< (const Arete& e2) const {
+        return weight > e2.weight;
     }
 };
 
 
 int main() {
 
-    int tc = -1;
+    int y = -1;
 
     while(1){
-        int nc, nr;
-        int ret = scanf("%d", &nc);
+        int ntown, nroad;
+        int ret = scanf("%d", &ntown);
         if (!ret || ret==EOF) break;
 
-        if(++tc) printf("\n");
+        if(++y) printf("\n");
 
-        scanf("%d", &nr);
+        scanf("%d", &nroad);
 
-        vector<Edge> adj[nc];
+        vector<Arete> adj[ntown];
 
-        for (int i = 0; i < nr; ++i) {
-            int to, from, danger;
-            scanf("%d", &to);
-            scanf("%d", &from);
+        for (int i = 0; i < nroad; ++i) {
+
+            int dep, arr, danger;
+
+            scanf("%d", &dep);
+            scanf("%d", &arr);
             scanf("%d", &danger);
-            to--;
-            from--;
-            adj[to].push_back(Edge(from, to, danger));
-            adj[from].push_back(Edge(to, from, danger));
+
+            dep--;
+            arr--;
+
+            adj[dep].push_back(Arete(arr, dep, danger));
+            adj[arr].push_back(Arete(dep, arr, danger));
         }
 
 
-        priority_queue<Edge> toAdd;
+        priority_queue<Arete> depAdd;
 
-        int father[nc];
-        int cost[nc];
-        int depth[nc];
+        int father[ntown];
+        int cost[ntown];
+        int depth[ntown];
+
         depth[0]=-1;
-        for (int i = 0; i < nc; ++i) {
+
+        for (int i = 0; i < ntown; ++i) {
             father[i]=-1;
         }
 
-        toAdd.push(Edge(0,0,0));
+        depAdd.push(Arete(0,0,0));
+
         int nAdded=0;
-        while(nAdded<nc){
-            if(toAdd.empty()){
-                for (int i = 0; i < nc; ++i) {
+
+        while(nAdded<ntown){
+            if(depAdd.empty()){
+                for (int i = 0; i < ntown; ++i) {
                     if(father[i]==-1){
-                        toAdd.push(Edge(i,i,0));
+                        depAdd.push(Arete(i,i,0));
                         depth[i]=-1;
                         break;
                     }
                 }
             }
-            Edge n = toAdd.top();
-            toAdd.pop();
-            if(father[n.a]!=-1) continue;
+            Arete n = depAdd.top();
+            depAdd.pop();
+            if(father[n.a1]!=-1) continue;
             nAdded++;
-            father[n.a] = n.b;
-            cost[n.a] = n.cost;
-            depth[n.a] = depth[n.b]+1;
-            for (unsigned int vi = 0; vi < adj[n.a].size(); ++vi) {
-                Edge e = adj[n.a][vi];
-                if(father[e.a]!=-1) continue;
-                toAdd.push(e);
+            father[n.a1] = n.a2;
+            cost[n.a1] = n.weight;
+            depth[n.a1] = depth[n.a2]+1;
+            for (unsigned int vi = 0; vi < adj[n.a1].size(); ++vi) {
+                Arete e = adj[n.a1][vi];
+                if(father[e.a1]!=-1) continue;
+                depAdd.push(e);
             }
         }
 
@@ -107,10 +118,12 @@ int main() {
                 d = max(d, cost[st]);
                 st = father[st];
             }
+
             while(depth[st]<depth[en]){
                 d = max(d, cost[en]);
                 en = father[en];
             }
+
             while(st!=en){
                 d = max(d, cost[st]);
                 st = father[st];

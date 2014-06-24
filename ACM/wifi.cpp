@@ -9,30 +9,30 @@
 
 using namespace std;
 
-double solve(double l, double r, int nw, int nh, int * pos){
+double findDistance(double x, double y, int nw, int nh, int * pos){
 
 
-    double dist = (r+l)*0.5;
-    if(round(10*r)==round(10*l)) return r;
+    double dist = (y+x)*0.5;
+    if(round(10*y)==round(10*x)) return y;
     int r_need = 1;
 
     int li = 0;
     for (int hi = 0; hi < nh; ++hi) {
         if(pos[hi]-pos[li]>2*dist){
             r_need++;
-            if(r_need>nw) return solve(dist, r, nw, nh, pos);
+            if(r_need>nw) return findDistance(dist, y, nw, nh, pos);
             li = hi;
         }
     }
-    return solve(l, dist, nw, nh, pos);
+    return findDistance(x, dist, nw, nh, pos);
 }
 
 int main() {
 
-    int tc;
-    scanf("%d", &tc);
+    int tcs;
+    scanf("%d", &tcs);
 
-    while(tc--){
+    while(tcs--){
 
         int nh, nw;
         scanf("%d", &nw);
@@ -45,7 +45,7 @@ int main() {
 
         sort(d, d+nh);
 
-        double result = solve(0, d[nh-1]-d[0], nw, nh, d);
+        double result = findDistance(0, d[nh-1]-d[0], nw, nh, d);
         result = round(10*result)/10;
 
         printf("%.1f\n", result);
